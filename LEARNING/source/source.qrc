@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>font.ttf</file>
+        <file>icon.png</file>
+        <file>icon16.png</file>
+        <file>icon24.png</file>
+        <file>icon32.png</file>
+        <file>icon48.png</file>
+        <file>tableview.qss</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file>1.png</file>
+        <file>2.png</file>
+        <file>3.png</file>
+        <file>4.png</file>
+        <file>5.png</file>
+        <file>x.png</file>
+        <file>x2.png</file>
+    </qresource>
+</RCC>
