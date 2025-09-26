@@ -1,41 +1,35 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QRect>
-#include <QLabel>
-#include <QParallelAnimationGroup>
-#include "animatedlabel.h"
-#include <QMouseEvent>
-#include <QEvent>
-#include <QDebug>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QFileInfo>
-#include <QLineEdit>
-#include "ui_mainwindow.h"
-#include <QVBoxLayout>
-#include <QResizeEvent>
-#include <QPropertyAnimation>
-#include <QGraphicsOpacityEffect>
-#include <QTimer>
-#include <QEasingCurve>
 #include <QAbstractAnimation>
-#include <QSize>
-#include <QScreen>
-#include <Windows.h>
-#include <WinUser.h>
-#include <QSqlQueryModel>
-#include <QSqlRecord>
-#include "rollwidget.h"
-#include <QShortcut>
-#include <QKeySequence>
-#include <QSystemTrayIcon>
-#include <QMenu>
+#include <QCloseEvent>
 #include <QEvent>
-#include "newinput.h"
+#include <QLabel>
+#include <QKeySequence>
+#include <QMainWindow>
+#include <QMenu>
+#include <QMouseEvent>
+#include <QParallelAnimationGroup>
+#include <QPoint>
+#include <QRect>
+#include <QShortcut>
+#include <QSize>
+#include <QSystemTrayIcon>
+#include <QTimer>
+#include <QWheelEvent>
+#include <QtSql/QSqlDatabase>
+#include <QVector>
+#include <functional>
+
+#include "animatedlabel.h"
 #include "managewidget.h"
+#include "newinput.h"
+#include "rollwidget.h"
+#include "ui_mainwindow.h"
+
+QT_FORWARD_DECLARE_CLASS(QLineEdit)
+QT_FORWARD_DECLARE_CLASS(QMenu)
+QT_FORWARD_DECLARE_CLASS(QSqlQuery)
 
 
 QT_BEGIN_NAMESPACE
@@ -54,42 +48,11 @@ public:
     MainWindow(QSqlDatabase * sql = nullptr ,QWidget *parent = nullptr);
     ~MainWindow();
 protected:
-    void closeEvent(QCloseEvent * event) override{
-        event->ignore();
-        transHideShow();
-    }
+    void closeEvent(QCloseEvent * event) override;
     void wheelEvent(QWheelEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override
-    {
-        if(fixed)
-            return;
-        if (event->button() == Qt::LeftButton) {
-            m_mousePressed = true;
-            m_lastMousePos = event->globalPos();
-        }
-    }
-
-    void mouseReleaseEvent(QMouseEvent *event) override
-    {
-
-        if(fixed)
-            return;
-        if (event->button() == Qt::LeftButton) {
-            m_mousePressed = false;
-        }
-    }
-
-    void mouseMoveEvent(QMouseEvent *event) override
-    {
-        if(fixed)
-            return;
-        if (m_mousePressed && m_dragEnabled) {
-            QPoint delta = event->globalPos() - m_lastMousePos;
-            move(pos() + delta);
-            roll->move(roll->pos() + delta);
-            m_lastMousePos = event->globalPos();
-        }
-    }
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
 //    bool nativeEvent(const QByteArray &eventType, void *message, long *result) override;
 
@@ -98,10 +61,11 @@ private:
     Ui::MainWindow *ui;
     QSqlDatabase * db;
     AnimatedLabel * label;
+    QLineEdit * passwordInput;
     QSystemTrayIcon * winIcon;
     QTimer *myTimer;
-    QParallelAnimationGroup *group ;
-    QParallelAnimationGroup *group2;
+    QParallelAnimationGroup *introAnimationGroup;
+    QParallelAnimationGroup *windowAnimationGroup;
     bool m_mousePressed;
     bool m_dragEnabled;
     bool fixed;
@@ -117,15 +81,29 @@ private:
 
 
 
-    void SuccessOperation(QLineEdit *lineEdit);
+    void SuccessOperation();
     void databaseCheck();
-    void initial();
     void setWorld(const QString & str,QLabel * tar,int speed);
     void appendWorld(const QString & str,QLabel * tar,int speed);
-    void appear();
-    void disappear();
-    void menuInitial();
-    void menuStatusChange();
+    void createCoreObjects();
+    void setupShortcuts();
+    void initializeUi();
+    void configureWindowAppearance();
+    void configureAnimatedLabel();
+    void configurePasswordInput();
+    void setupCursorBlinking();
+    void setupIntroAnimations();
+    void setupWindowAnimation();
+    void configureSystemTray();
+    void setupTrayActions();
+    void connectTrayActions();
+    void updateTrayAvailability();
+    void setupRollWidgets();
+    void showTypedMessage(const QString &text, int speed = 150, bool append = false);
+    void stopCursorBlinking();
+    void runLater(int delayMs, const std::function<void()> &task);
+    void setWindowInteractivity(bool clickThroughEnabled);
+    void toggleRollVisibility(bool visible);
 
 public slots:
 
@@ -133,7 +111,7 @@ public slots:
 private slots:
     void position(QRect * mainWindow,QRect * tar,Type type);
     void onReturnPressed();
-    void close();
+    void requestQuit();
     void transHideShow();
     void findShow();
 
