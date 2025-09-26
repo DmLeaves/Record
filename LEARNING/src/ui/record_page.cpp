@@ -282,7 +282,8 @@ void RecordPage::buildUi()
     m_notification->setFixedHeight(36);
     m_notification->raise();
 
-    new QShortcut(QKeySequence::Copy, this, [this]() { copyPassword(); });
+    auto *copyShortcut = new QShortcut(QKeySequence::Copy, this);
+    connect(copyShortcut, &QShortcut::activated, this, &RecordPage::copyPassword);
 }
 
 void RecordPage::displayRecord(const Record &record)
