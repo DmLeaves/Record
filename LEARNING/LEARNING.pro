@@ -1,55 +1,46 @@
-QT       += core gui sql
+QT       += core gui widgets sql
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+CONFIG += c++17
 
-CONFIG += c++11
-
-# You can make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
 SOURCES += \
-    animatedlabel.cpp \
-    changlabel.cpp \
-    cyclebox.cpp \
-    dataoper.cpp \
-    getfile.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    managewidget.cpp \
-    messagewindows.cpp \
-    newinput.cpp \
-    rollwidget.cpp \
-    signalanimalabel.cpp \
-    userdata.cpp \
-    userdataparser.cpp
+    src/app/main.cpp \
+    src/core/database_manager.cpp \
+    src/core/record_repository.cpp \
+    src/core/master_password_service.cpp \
+    src/core/import_service.cpp \
+    src/ui/main_window.cpp \
+    src/ui/unlock_widget.cpp \
+    src/ui/record_page.cpp \
+    src/ui/record_list_model.cpp \
+    src/ui/record_editor_dialog.cpp \
+    src/ui/import_dialog.cpp \
+    src/ui/tray_manager.cpp \
+    src/ui/notifications.cpp
 
 HEADERS += \
-    animatedlabel.h \
-    changlabel.h \
-    cyclebox.h \
-    data.h \
-    dataoper.h \
-    getfile.h \
-    mainwindow.h \
-    managewidget.h \
-    messagewindows.h \
-    newinput.h \
-    rollwidget.h \
-    signalanimalabel.h \
-    userdata.h \
-    userdataparser.h
+    src/core/database_manager.h \
+    src/core/record.h \
+    src/core/record_repository.h \
+    src/core/master_password_service.h \
+    src/core/import_service.h \
+    src/ui/main_window.h \
+    src/ui/unlock_widget.h \
+    src/ui/record_page.h \
+    src/ui/record_list_model.h \
+    src/ui/record_editor_dialog.h \
+    src/ui/import_dialog.h \
+    src/ui/tray_manager.h \
+    src/ui/notifications.h
 
-FORMS += \
-    mainwindow.ui \
-    managewidget.ui
+DISTFILES += README.md LICENSE
 
-# Default rules for deployment.
+RESOURCES += source/source.qrc
+
+RC_ICONS += ./logo.ico
+
+# Deployment rules
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-RESOURCES += \
-    source/source.qrc
-
-RC_ICONS += ./logo.ico
