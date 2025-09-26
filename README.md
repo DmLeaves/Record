@@ -1,31 +1,23 @@
 # Record
 
-A Qt-based desktop application for managing account and password records. The project has been fully refactored to provide a modular architecture, modern widgets, and a streamlined user experience.
+This repository contains a Qt 5 desktop application for managing small sets of
+credentials with a lightweight, semi-transparent interface. The original UI has
+been preserved while the project layout has been reorganised for easier ongoing
+maintenance.
 
-## Features
+## Project layout
 
-- Secure unlock flow with master password creation and verification (SHA3-512 hashing).
-- Responsive, searchable record browser with instant detail preview and copy-to-clipboard actions.
-- Dedicated dialogs for record editing and batch import from structured text files.
-- System tray integration for quick locking/unlocking and background operation.
-- SQLite-backed data storage with automatic schema migration.
-
-## Building
-
-```bash
-qmake LEARNING/LEARNING.pro
-make
+```
+LEARNING/
+├── forms/                # Qt Designer `.ui` files
+├── source/               # Resources referenced from the UI
+├── src/
+│   ├── app/              # Application entry point
+│   ├── core/             # Data access and parsing logic
+│   └── ui/               # Widgets that implement the animated password UI
+│       └── widgets/      # Reusable helper widgets (animated labels, etc.)
+└── LEARNING.pro          # qmake project definition
 ```
 
-The application stores its data under the OS specific `AppDataLocation` (falls back to `~/.record/data.db` when unavailable).
-
-## Import file format
-
-Each record is separated by a blank line. Within a record the lines should appear as:
-
-1. Title
-2. Username
-3. Password
-4. Category (optional)
-
-Lines starting with `//` are treated as comments and ignored during import.
+The refactor keeps the frameless, translucent visuals while making it easier to
+locate related code and extend the application in future iterations.

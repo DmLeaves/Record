@@ -1,0 +1,17 @@
+# Qt Creator generated files
+*.pro.user
+*.user
+*.user.*
+*.qmake.stash
+
+# Build directories
+build*/
+*.o
+*.obj
+*.dll
+*.exe
+*.pdb
+*.ilk
+
+# macOS
+.DS_Store

@@ -1,25 +1,44 @@
-#include "../core/database_manager.h"
-#include "../ui/main_window.h"
-
 #include <QApplication>
-#include <QMessageBox>
-#include <QObject>
+#include <QMainWindow>
+#include <QPalette>
+#include <QVBoxLayout>
+#include <QWidget>
+#include "ui/mainwindow.h"
+#include "ui/rollwidget.h"
+#include "ui/messagewindows.h"
+#include "ui/managewidget.h"
+#include "ui/newinput.h"
+#include "ui/getfile.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    QApplication::setApplicationName(QStringLiteral("Record"));
-    QApplication::setOrganizationName(QStringLiteral("Record"));
+    //数据库初始化
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("data.db");
+    db.setUserName("Program");
+    db.setPassword("Ql123[]");
+    db.open();
 
-    DatabaseManager database;
-    if (!database.open(QString()))
-    {
-        QMessageBox::critical(nullptr, QObject::tr("错误"), QObject::tr("无法打开数据库"));
-        return 1;
-    }
+    MainWindow mainWindow(&db);
+    mainWindow.show();
 
-    MainWindow window(&database);
-    window.show();
+    //测试代码][
+
+//    RollWidget roll(&db,&mainWindow);
+//    roll.show();
+
+//    ManageWidget win(&db);
+//    win.show();
+//    newInput input(&db);
+//    input.show();
+
+
+//    GetFile file(&db);
+//    file.show();
+
 
     return app.exec();
 }
+
+
